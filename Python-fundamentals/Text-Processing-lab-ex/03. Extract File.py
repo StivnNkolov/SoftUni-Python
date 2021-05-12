@@ -1,0 +1,11 @@
+# input_data = input()
+# my_sh = chr(92)
+# my_text = input_data.replace(chr(92), ".")
+# my_text_as_list = my_text.split(".")
+# print(f"File name: {my_text_as_list[-2]}")
+# print(f"File extension: {my_text_as_list[-1]}")
+
+file_path = input().split("\\")
+file_name, file_extension = file_path[-1].split(".")
+print(f"File name: {file_name}")
+print(f"File extension: {file_extension}")
