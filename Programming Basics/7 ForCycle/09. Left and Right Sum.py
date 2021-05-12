@@ -1,0 +1,15 @@
+n = int(input())
+
+first_sum = 0
+second_sum = 0
+
+for i in range(n):
+    number = int(input())
+    first_sum += number
+for j in range(n):
+    number2 = int(input())
+    second_sum += number2
+if first_sum == second_sum:
+    print(f"Yes, sum = {first_sum}")
+else:
+    print(f"No, diff = {abs(first_sum - second_sum)}")
