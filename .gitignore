@@ -127,5 +127,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-/Programming Basics/1 FirstStepsInCoding/.idea
+.idea
 .idea
