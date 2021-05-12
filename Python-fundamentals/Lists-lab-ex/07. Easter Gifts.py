@@ -21,3 +21,4 @@ while not commands == "No Money":
 for gif in input_gifts:
     if not gif == "None":
         print(gif, end=" ")
+        
