@@ -40,8 +40,6 @@ while cups_queue:
         have_bottles = False
         break
 
-
-
 if have_bottles:
     if not cups_queue:
         print(f"Bottles: {''.join([str(el) for el in bottles_stored_capacity])}")

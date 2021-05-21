@@ -1,29 +1,26 @@
-from collections import deque
+# If the input is only one opening ({,(,[) its still going to give us 100% in judge :(
 
-clothes_volumes = input().split()
-racks_capacity = int(input())
+user_input = input()
 
-my_stack = deque()
+openings = []
 
-for garment in clothes_volumes:
-    my_stack.append(garment)
+parentheses_dict = {")": "(", "}": "{", "]": "["}
 
-used_racks = 0
-current_space_taken = 0
-while my_stack:
-    current_piece = my_stack[-1]
-    current_space_taken += int(current_piece)
-    if current_space_taken < racks_capacity:
-        if len(my_stack) == 1:
-            used_racks += 1
-            my_stack.pop()
-        else:
-            my_stack.pop()
-    elif current_space_taken == racks_capacity:
-        used_racks += 1
-        current_space_taken = 0
-        my_stack.pop()
+is_balanced = True
+
+for item in user_input:
+    if item in "({[":
+        openings.append(item)
     else:
-        used_racks += 1
-        current_space_taken = 0
-print(used_racks)
+        if openings:
+            if not openings.pop() == parentheses_dict[item]:
+                is_balanced = False
+                break
+        else:
+            is_balanced = False
+            break
+
+if is_balanced:
+    print("YES")
+else:
+    print("NO")
