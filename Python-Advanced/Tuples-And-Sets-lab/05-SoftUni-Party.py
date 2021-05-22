@@ -1,25 +1,38 @@
-number_of_guests = int(input())
+def print_results(data):
+    sorted_data = sorting_output(data)
+    print(len(sorted_data))
+    [print(el) for el in sorted_data]
 
-vip_guests = set()
-regular_guests = set()
 
-for _ in range(number_of_guests):
-    guest_number = input()
-    if guest_number[0].isdigit():
-        vip_guests.add(guest_number)
-    else:
-        regular_guests.add(guest_number)
+def sorting_output(data):
+    return sorted(data)
 
-guests_coming = input()
-while not guests_coming == "END":
-    if guests_coming in vip_guests:
-        vip_guests.remove(guests_coming)
-    elif guests_coming in regular_guests:
-        regular_guests.remove(guests_coming)
-    guests_coming = input()
 
-missing_guests = regular_guests | vip_guests
-sorted_missing_g = sorted(missing_guests)
-print(len(sorted_missing_g))
-for el in sorted_missing_g:
-    print(el)
+def adding_to_reservations(number):
+    vip_guests = set()
+    regular_guests = set()
+
+    for guest in range(number):
+        reservation = input()
+        if reservation[0].isdigit():
+            vip_guests.add(reservation)
+        else:
+            regular_guests.add(reservation)
+    return vip_guests, regular_guests
+
+
+def removing_guests_from_list(vip, regular):
+    guest = input()
+    while not guest == "END":
+        if guest in vip:
+            vip.remove(guest)
+        elif guest in regular:
+            regular.remove(guest)
+        guest = input()
+    missing_guests = regular | vip
+    return missing_guests
+
+
+vip_list, regular_list = adding_to_reservations(int(input()))
+missing_guests_list = removing_guests_from_list(vip_list, regular_list)
+print_results(missing_guests_list)

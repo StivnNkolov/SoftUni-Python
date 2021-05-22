@@ -1,10 +1,14 @@
-number_of_people = int(input())
+def adding_unique_names_to_set(names_count):
+    unique_names_set = set()
+    for _ in range(names_count):
+        name = input()
+        unique_names_set.add(name)
+    return unique_names_set
 
-peoples_set = set()
 
-for _ in range(number_of_people):
-    name = input()
-    peoples_set.add(name)
+def print_results(all_names):
+    [print(el) for el in all_names]
 
-for el in peoples_set:
-    print(el)
+
+unique_names = adding_unique_names_to_set(int(input()))
+print_results(unique_names)
