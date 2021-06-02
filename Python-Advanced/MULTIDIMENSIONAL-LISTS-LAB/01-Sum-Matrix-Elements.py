@@ -26,3 +26,17 @@ sum_of_all_elements = calculating_sum_of_elements(matrix)
 
 print(sum_of_all_elements)
 print(matrix)
+
+
+# rows, columns = [int(el) for el in input().split(", ")]
+#
+# all_el_sum = 0
+# matrix = []
+#
+# for row in range(rows):
+#     user_input = [int(el) for el in input().split(", ")]
+#     matrix.append(user_input)
+#     all_el_sum += sum(user_input)
+#
+# print(all_el_sum)
+# print(matrix)
