@@ -1,26 +1,27 @@
 rows, columns = [int(el) for el in input().split()]
 
 matrix = []
+for i in range(rows):
+    matrix.append([])
+    for j in range(columns):
+        matrix[i].append(0)
 
-input_string = input()
-rowzz = input_string
+input_data = input()
+index_for_element = 0
+
 for r in range(1, rows + 1):
-    if not len(input_string) < columns:
-        curr_row = rowzz[:columns]
-        leftover = rowzz[columns:]
-        if not r % 2 == 0:
-            matrix.append(curr_row)
-        else:
-            matrix.append(curr_row[::-1])
-
-        rowzz = leftover + curr_row
+    if not r % 2 == 0:
+        for c in range(columns):
+            matrix[r - 1][c] = input_data[index_for_element]
+            index_for_element += 1
+            if index_for_element == len(input_data):
+                index_for_element = 0
     else:
-        diff = columns - len(input_string)
-        leftover = input_string[diff:]
-        if not r % 2 == 0:
-            matrix.append(input_string + input_string[:diff])
-        else:
-            matrix.append((leftover + input_string)[::-1])
+        for c1 in range(columns - 1, -1, -1):
+            matrix[r - 1][c1] = input_data[index_for_element]
+            index_for_element += 1
+            if index_for_element == len(input_data):
+                index_for_element = 0
 
-[print(el) for el in matrix]
+[print("".join(el)) for el in matrix]
 
