@@ -1,4 +1,5 @@
 END_COMMAND = "END"
+SWAP_COMMAND = "swap"
 
 
 def is_len_input_data_valid(user_input):
@@ -8,7 +9,7 @@ def is_len_input_data_valid(user_input):
 
 
 def is_input_data_from_zero_index_swap(user_input1):
-    if user_input1[0] == "swap":
+    if user_input1[0] == SWAP_COMMAND:
         return True
     return False
 
