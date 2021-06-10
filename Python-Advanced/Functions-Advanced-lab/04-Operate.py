@@ -1,0 +1,18 @@
+# reduce takes as argument function and iterable. (Lambda is perfect for this case)
+
+from functools import reduce
+
+
+def operate(operator, *args):
+    if operator == "+":
+        return reduce(lambda x, y: x + y, args)
+    elif operator == "-":
+        return reduce(lambda x, y: x - y, args)
+    elif operator == "*":
+        return reduce(lambda x, y: x * y, args)
+    elif operator == "/":
+        return reduce(lambda x, y: x / y, args)
+
+
+print(operate("+", 1, 2, 3))
+print(operate("*", 3, 4))
