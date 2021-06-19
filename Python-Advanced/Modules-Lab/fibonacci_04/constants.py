@@ -1,0 +1,4 @@
+STOP_COMMAND = "Stop"
+CREATE_COMMAND = "Create"
+LOCATE_COMMAND = "Locate"
+
