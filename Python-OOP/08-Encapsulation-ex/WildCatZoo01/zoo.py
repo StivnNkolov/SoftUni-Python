@@ -1,3 +1,6 @@
+from WildCatZoo01.cheetah import Cheetah
+
+
 class Zoo:
     def __init__(self, name, budget, animal_capacity, workers_capacity):
         self.name = name
