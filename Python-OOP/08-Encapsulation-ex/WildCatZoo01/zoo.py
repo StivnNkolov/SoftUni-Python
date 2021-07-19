@@ -38,20 +38,14 @@ class Zoo:
         return f"There is no {worker_name} in the zoo"
 
     def pay_workers(self):
-        total_workers_salary = 0
-        for worker in self.workers:
-            total_workers_salary += worker.salary
-
+        total_workers_salary = sum([worker.salary for worker in self.workers])
         if total_workers_salary <= self.__budget:
             self.__budget -= total_workers_salary
             return f"You payed your workers. They are happy. Budget left: {self.__budget}"
         return "You have no budget to pay your workers. They are unhappy"
 
     def tend_animals(self):
-        total_sum_for_animals_care = 0
-        for animal in self.animals:
-            total_sum_for_animals_care += animal.money_for_care
-
+        total_sum_for_animals_care = sum([animal.money_for_care for animal in self.animals])
         if total_sum_for_animals_care <= self.__budget:
             self.__budget -= total_sum_for_animals_care
             return f"You tended all the animals. They are happy. Budget left: {self.__budget}"
@@ -61,56 +55,37 @@ class Zoo:
         self.__budget += amount
 
     def animals_status(self):
-        result = f"You have {len(self.animals)} animals\n"
+        result = [f"You have {len(self.animals)} animals"]
+        lions = [repr(animal)  for animal in self.animals if animal.__class__.__name__ == "Lion"]
+        result.append(f"----- {len(lions)} Lions:")
+        result.extend(lions)
 
-        lions = []
-        for animal in self.animals:
-            if animal.__class__.__name__ == "Lion":
-                lions.append(repr(animal) + "\n")
-        result += f"----- {len(lions)} Lions:\n"
-        result += ''.join(lions)
-        tigers = []
-        for animal in self.animals:
-            if animal.__class__.__name__ == "Tiger":
-                tigers.append(repr(animal) + "\n")
-        result += f"----- {len(tigers)} Tigers:\n"
-        result += ''.join(tigers)
-        cheetahs = []
-        for animal in self.animals:
-            if animal.__class__.__name__ == "Cheetah":
-                cheetahs.append(repr(animal))
-        result += f"----- {len(cheetahs)} Cheetahs:\n"
-        result += '\n'.join(cheetahs)
-        return result
+        tigers = [repr(animal) for animal in self.animals if animal.__class__.__name__ == "Tiger"]
+        result.append(f"----- {len(tigers)} Tigers:")
+        result.extend(tigers)
+
+        cheetahs = [repr(animal) for animal in self.animals if animal.__class__.__name__ == "Cheetah"]
+        result.append(f"----- {len(cheetahs)} Cheetahs:")
+        result.extend(cheetahs)
+
+        return '\n'.join(result)
 
     def workers_status(self):
-        result = f"You have {len(self.workers)} workers\n"
+        result = [f"You have {len(self.workers)} workers"]
 
-        keepers = []
-        for w in self.workers:
-            if w.__class__.__name__ == "Keeper":
-                keepers.append(repr(w) + "\n")
+        keepers = [repr(worker) for worker in self.workers if worker.__class__.__name__ == "Keeper"]
+        result.append(f"----- {len(keepers)} Keepers:")
+        result.extend(keepers)
 
-        result += f"----- {len(keepers)} Keepers:\n"
-        result += ''.join(keepers)
+        caretakers = [repr(worker) for worker in self.workers if worker.__class__.__name__ == "Caretaker"]
+        result.append(f"----- {len(caretakers)} Caretakers:")
+        result.extend(caretakers)
 
-        caretakers = []
-        for w in self.workers:
-            if w.__class__.__name__ == "Caretaker":
-                caretakers.append(repr(w) + "\n")
+        vets = [repr(worker) for worker in self.workers if worker.__class__.__name__ == "Vet"]
+        result.append(f"----- {len(vets)} Vets:")
+        result.extend(vets)
 
-        result += f"----- {len(caretakers)} Caretakers:\n"
-        result += ''.join(caretakers)
-
-        vets = []
-        for w in self.workers:
-            if w.__class__.__name__ == "Vet":
-                vets.append(repr(w) )
-
-        result += f"----- {len(vets)} Vets:\n"
-        result += '\n'.join(vets)
-
-        return result
+        return "\n".join(result)
 
 
 
