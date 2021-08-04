@@ -10,8 +10,5 @@ class Product:
     def increase(self, quantity):
         self.quantity += quantity
 
-# test = Product("Kure", 65)
-# print(test.quantity, test.name)
-#
-# test.decrease(90)
-# print(test.quantity)
+    def __repr__(self):
+        return f"{self.name}: {self.quantity}"
