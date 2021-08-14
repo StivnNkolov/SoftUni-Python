@@ -1,0 +1,13 @@
+from project.medicine.medicine import Medicine
+from project.survivor import Survivor
+
+
+class Painkiller(Medicine):
+    health_increase = 20
+
+    def __init__(self):
+        super().__init__(self.health_increase)
+
+
+
+
