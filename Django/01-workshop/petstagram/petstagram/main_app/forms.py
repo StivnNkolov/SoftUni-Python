@@ -1,105 +1,21 @@
 from django import forms
+from petstagram.common.helpers import BootstrapFormMixin, DisabledFormMixin
+from petstagram.main_app.models import Pet, PetPhoto
 
-from petstagram.main_app.helpers import BootstrapFormMixin, DisabledFormMixin, find_profile, find_pets_for_profile
-from petstagram.main_app.models import Profile, Pet, PetPhoto
 
+class CreatePetForm(BootstrapFormMixin, forms.ModelForm):
 
-class CreateProfileForm(BootstrapFormMixin, forms.ModelForm):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.user = user
         self._init_bootstrap_form_controls()
 
-    class Meta:
-        model = Profile
-        fields = ['first_name', 'last_name', 'profile_picture']
-        widgets = {
-            'first_name': forms.TextInput(
-                attrs={
-                    'placeholder': 'Enter first name',
-                    # 'class': 'form-control',
-                },
-            ),
-            'last_name': forms.TextInput(
-                attrs={
-                    'placeholder': 'Enter last name',
-                    # 'class': 'form-control',
-                },
-            ),
-            'profile_picture': forms.URLInput(
-                attrs={
-                    'placeholder': 'Enter URL',
-                    # 'class': 'form-control',
-                }
-            )
-        }
-
-
-class EditProfileForm(BootstrapFormMixin, forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._init_bootstrap_form_controls()
-        self.initial['gender'] = Profile.DO_NOT_SHOW_GENDER
-
-    class Meta:
-        model = Profile
-        fields = '__all__'
-        widgets = {
-            'first_name': forms.TextInput(
-                attrs={
-                    'placeholder': 'Enter first name',
-                },
-            ),
-            'last_name': forms.TextInput(
-                attrs={
-                    'placeholder': 'Enter last name',
-                },
-            ),
-            'profile_picture': forms.URLInput(
-                attrs={
-                    'placeholder': 'Enter URL',
-                }
-            ),
-            'date_of_birth': forms.DateInput(
-                attrs={
-                    'min': '1920-01-01',
-                }
-            ),
-            'email': forms.EmailInput(
-                attrs={
-                    'placeholder': 'Enter email',
-                }
-            ),
-
-            'gender': forms.Select(
-                choices=Profile.GENDERS,
-            ),
-            'description': forms.Textarea(
-                attrs={
-                    'rows': 3,
-                    'placeholder': 'Enter description'
-                }
-            )
-        }
-
-
-class DeleteProfileForm(forms.ModelForm):
     def save(self, commit=True):
-        pets = list(self.instance.pet_set.all())
-        photos = PetPhoto.objects.filter(tagged_pets__in=pets)
-        photos.delete()
-        self.instance.delete()
-        return self.instance
-
-    class Meta:
-        model = Profile
-        fields = []
-
-
-class PetForm(BootstrapFormMixin, forms.ModelForm):
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._init_bootstrap_form_controls()
+        pet = super().save(commit=False)
+        pet.user = self.user
+        if commit:
+            pet.save()
+        return pet
 
     class Meta:
         model = Pet
@@ -113,6 +29,16 @@ class PetForm(BootstrapFormMixin, forms.ModelForm):
             ),
 
         }
+
+
+class EditPetForm(BootstrapFormMixin, forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._init_bootstrap_form_controls()
+
+    class Meta:
+        model = Pet
+        fields = '__all__'
 
 
 class DeletePetForm(BootstrapFormMixin, DisabledFormMixin, forms.ModelForm):
@@ -133,9 +59,17 @@ class DeletePetForm(BootstrapFormMixin, DisabledFormMixin, forms.ModelForm):
 
 class CreatePhotoForm(BootstrapFormMixin, forms.ModelForm):
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.user = user
         self._init_bootstrap_form_controls()
+
+    def save(self, commit=True):
+        smt = super().save(commit=False)
+        smt.user = self.user
+        if commit:
+            smt.save()
+        return smt
 
     class Meta:
         model = PetPhoto

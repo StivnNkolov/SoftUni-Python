@@ -1,0 +1,66 @@
+{% extends 'base/base.html' %}
+{% block start %}
+    {% load filters %}
+
+    <!-- End Navigation Bar -->
+
+    <!-- Profile Information -->
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="d-flex">
+                <div class="d-inline p-2 w-50">
+                    <img src="{{ current_profile.profile_picture }}"
+                         class="w-50 rounded mx-auto d-block" alt="description">
+                </div>
+                <div class="d-inline p-2 w-50">
+                    <div class="d-flex flex-column">
+                        <h5><u>Name:</u> {{ current_profile.first_name }} {{ current_profile.last_name }}</h5>
+                        <!-- If Date of Birth -->
+                        {% if current_profile.date_of_birth %}
+                            <h5><u>Birthdate:</u> {{ current_profile.date_of_birth }}</h5>
+                        {% endif %}
+                        <!-- If Email -->
+                        {% if current_profile.email %}
+                            <h5><u>Email:</u> {{ current_profile.email }}</h5>
+                        {% endif %}
+                        <!-- If Gender is Chosen -->
+                        {% if current_profile.gender %}
+                            <h5><u>Gender:</u> {{ current_profile.gender }}</h5>
+                        {% endif %}
+                        <!-- If Description -->
+                        {% if current_profile.description %}
+                            <h5><u>Description:</u> {{ current_profile.description }}</h5>
+                        {% endif %}
+                    </div>
+                    <p class="mt-2">Total Images: {{ total_images }}</p>
+                    <p class="mt-2">Total Likes: {{ total_likes }}</p>
+                    <a href="{% url 'edit profile' request.user.id %}" class="btn btn-primary">Edit</a>
+                    <a href="{% url 'edit password' request.user.id %}" class="btn btn-primary">Change Password</a>
+                    <a href="{% url 'delete profile' request.user.id %}" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- End Profile Information -->
+    {% if user_pets %}
+        <!-- Pets Information -->
+        <h2 class="text-center">My Pets</h2>
+        <div class="container mb-4">
+            <div class="d-flex justify-content-start mb-5">
+                <!-- Info for First Pet -->
+                {% for pet in user_pets %}
+                    <div style="width: 18rem;">
+                        <h5>{{ pet.name }}</h5>
+                        {% if pet.date_of_birth %}
+                            <p class="mt-2">Age: {{ pet.date_of_birth.year|find_date_of_birth }}</p>
+                        {% endif %}
+                        <a href="{% url 'edit pet' pet.id %}" class="btn btn-primary">Edit</a>
+                        <a href="{% url 'delete pet' pet.id %}" class="btn btn-danger">Delete</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}

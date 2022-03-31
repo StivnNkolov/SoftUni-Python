@@ -1,6 +1,8 @@
 import os.path
 from pathlib import Path
 
+from django.urls import reverse_lazy
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-_dq&^n)+**4h*pmbu=5^f=%*xsp%!!t9o%bf1q+onl9$nc_+l6'
@@ -8,7 +10,6 @@ SECRET_KEY = 'django-insecure-_dq&^n)+**4h*pmbu=5^f=%*xsp%!!t9o%bf1q+onl9$nc_+l6
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -19,6 +20,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'petstagram.main_app',
+    'petstagram.accounts',
 ]
 
 MIDDLEWARE = [
@@ -52,14 +54,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'petstagram.wsgi.application'
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -76,7 +76,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -85,9 +84,12 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 STATIC_URL = 'static/'
 MEDIA_ROOT = BASE_DIR / 'mediafiles'
 MEDIA_URL = 'mediafiles/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'accounts.AppUser'
+
+LOGOUT_REDIRECT_URL = reverse_lazy('index')

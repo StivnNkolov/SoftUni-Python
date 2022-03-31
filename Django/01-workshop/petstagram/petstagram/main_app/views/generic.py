@@ -1,31 +1,42 @@
 from django.shortcuts import render, redirect
+from django.views.generic import TemplateView, ListView
 
 from petstagram.main_app.models import PetPhoto
-from petstagram.main_app.helpers import find_profile
 
 
-def home(request):
-    hide_additional_items = True
-    context = {
-        'hide_items': hide_additional_items,
-    }
+#
+# def home(request):
+#     hide_additional_items = True
+#     context = {
+#         'hide_items': hide_additional_items,
+#     }
+#
+#     return render(request, 'main_app/home_page.html', context)
+#
+#
+# def dashboard(request):
+#     pet_photos = PetPhoto.objects.all()
+#
+#     context = {
+#         'pet_photos': pet_photos,
+#     }
+#
+#     return render(request, 'main_app/dashboard.html', context)
 
-    return render(request, 'home_page.html', context)
+class HomeView(TemplateView):
+    template_name = 'main_app/home_page.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('dashboard')
+        return super().dispatch(request, *args, **kwargs)
 
 
-def dashboard(request):
-    current_profile = find_profile()
-
-    if current_profile is None:
-        return redirect('401')
-    pet_photos = set(PetPhoto.objects.prefetch_related('tagged_pets').filter(tagged_pets__user_profile=current_profile))
-
-    context = {
-        'pet_photos': pet_photos,
-    }
-
-    return render(request, 'dashboard.html', context)
+class DashboardView(ListView):
+    template_name = 'main_app/dashboard.html'
+    model = PetPhoto
+    context_object_name = 'pet_photos'
 
 
-def denied_access(request):
-    return render(request, 'tags/401_error.html')
+# def denied_access(request):
+#     return render(request, 'tags/401_error.html')
