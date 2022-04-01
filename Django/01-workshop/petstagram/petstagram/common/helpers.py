@@ -1,26 +1,7 @@
-from django.shortcuts import redirect, render
-
-from petstagram.main_app.models import Profile, Pet
-
-
-# def find_profile():
-#     first_profile = Profile.objects.all()
-#
-#     if first_profile:
-#         return first_profile[0]
-#     else:
-#         return None
-#
-#
-# def find_pets_for_profile():
-#     profile = find_profile()
-#     if not profile:
-#         return None
-#     pets = profile.pet_set.all()
-#     if pets:
-#         return pets
-#     return None
 # TODO use your disabled mixin instead of doing it on hand punk. Add some more mixins you need em!@@@
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
+
 
 class BootstrapFormMixin:
     fields = {}
@@ -51,17 +32,25 @@ class DisabledFormMixin:
                 setattr(field.widget, 'attrs', {})
             field.widget.attrs['disabled'] = 'disabled'
             field.required = False
-# def crud_operations(request, form_instance, redirect_to, model_instance, render_page):
-#     form = form_instance(instance=model_instance)
-#
-#     if request.method == 'POST':
-#         form = form_instance(request.POST, request.FILES, instance=model_instance)
-#         if form.is_valid():
-#             form.save()
-#             return redirect(redirect_to)
-#
-#     context = {
-#         'form': form,
-#         'pet': model_instance,
-#     }
-#     return render(request, render_page, context)
+
+
+class AuthenticationRedirectToLoginMixin:
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('log in')
+        return super().dispatch(request, *args, **kwargs)
+
+
+class AuthenticationRedirectToDashboardMixin:
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('dashboard')
+        return super().dispatch(request, *args, **kwargs)
+
+
+class GetSuccessUrlToProfileDetails:
+
+    def get_success_url(self):
+        return reverse_lazy('profile details', kwargs={'pk': self.request.user.id})

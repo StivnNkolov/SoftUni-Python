@@ -3,11 +3,12 @@ from django.urls import reverse_lazy
 
 from django.views.generic import CreateView, DetailView, UpdateView
 
+from petstagram.common.helpers import AuthenticationRedirectToLoginMixin
 from petstagram.main_app.forms import CreatePhotoForm, EditPhotoForm
 from petstagram.main_app.models import PetPhoto
 
 
-class CreatePhotoView(CreateView):
+class CreatePhotoView(AuthenticationRedirectToLoginMixin, CreateView):
     template_name = 'main_app/photo_create.html'
     form_class = CreatePhotoForm
     success_url = reverse_lazy('dashboard')
@@ -18,10 +19,6 @@ class CreatePhotoView(CreateView):
         kwargs['user'] = self.request.user
         return kwargs
 
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return redirect('log in')
-        return super().dispatch(request, *args, **kwargs)
 
 
 class PhotoDetailsView(DetailView):

@@ -1,12 +1,12 @@
-from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
 
+from petstagram.common.helpers import AuthenticationRedirectToLoginMixin, GetSuccessUrlToProfileDetails
 from petstagram.main_app.forms import CreatePetForm, DeletePetForm, EditPetForm
 from petstagram.main_app.models import Pet
 
 
-class CreatePet(CreateView):
+class CreatePet(AuthenticationRedirectToLoginMixin, CreateView):
     template_name = 'main_app/pet_create.html'
     success_url = reverse_lazy('dashboard')
     form_class = CreatePetForm
@@ -17,29 +17,17 @@ class CreatePet(CreateView):
         kwargs['user'] = self.request.user
         return kwargs
 
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return redirect('log in')
-        return super().dispatch(request, *args, **kwargs)
 
-
-class EditPet(UpdateView):
+class EditPet(GetSuccessUrlToProfileDetails, UpdateView):
     template_name = 'main_app/pet_edit.html'
     model = Pet
-    # fields = '__all__'
     form_class = EditPetForm
 
-    def get_success_url(self):
-        return reverse_lazy('profile details', kwargs={'pk': self.request.user.id})
 
-
-class DeletePet(UpdateView):
+class DeletePet(GetSuccessUrlToProfileDetails, UpdateView):
     template_name = 'main_app/pet_delete.html'
     model = Pet
     form_class = DeletePetForm
-
-    def get_success_url(self):
-        return reverse_lazy('profile details', kwargs={'pk': self.request.user.id})
 
 # def delete_pet(request, pk):
 #     # pet = Pet.objects.get(id=pk)

@@ -9,10 +9,11 @@ from petstagram.accounts.forms import CreateProfileForm, EditProfileForm, Delete
 from petstagram.accounts.models import Profile
 from django.contrib.auth import logout
 
+from petstagram.common.helpers import AuthenticationRedirectToDashboardMixin, GetSuccessUrlToProfileDetails
 from petstagram.main_app.models import Pet, PetPhoto
 
 
-class UserLoginView(LoginView):
+class UserLoginView(AuthenticationRedirectToDashboardMixin, LoginView):
     template_name = 'accounts/login_page.html'
     success_url = reverse_lazy('dashboard')
     form_class = LogInForm
@@ -22,21 +23,11 @@ class UserLoginView(LoginView):
             return self.success_url
         return super().get_success_url()
 
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return redirect('dashboard')
-        return super().dispatch(request, *args, **kwargs)
 
-
-class UserRegisterView(CreateView):
+class UserRegisterView(AuthenticationRedirectToDashboardMixin, CreateView):
     template_name = 'accounts/profile_create.html'
     success_url = reverse_lazy('index')
     form_class = CreateProfileForm
-
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return redirect('dashboard')
-        return super().dispatch(request, *args, **kwargs)
 
 
 class ChangeUserPasswordView(PasswordChangeView):
@@ -68,13 +59,10 @@ class UserProfileDetailsView(DetailView):
         return context
 
 
-class EditProfileView(UpdateView):
+class EditProfileView(GetSuccessUrlToProfileDetails, UpdateView):
     template_name = 'accounts/profile_edit.html'
     model = Profile
     form_class = EditProfileForm
-
-    def get_success_url(self):
-        return reverse_lazy('profile details', kwargs={'pk': self.request.user.id})
 
 
 class DeleteProfileView(DeleteView):
